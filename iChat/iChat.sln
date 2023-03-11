@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iChat", "iChat\iChat.csproj", "{3AF460F6-26B6-4B15-AFB1-3AE182722856}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iServer", "iServer\iServer.csproj", "{CFF087EB-5931-4CD8-894B-9DEBBE093E7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AF460F6-26B6-4B15-AFB1-3AE182722856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF460F6-26B6-4B15-AFB1-3AE182722856}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF460F6-26B6-4B15-AFB1-3AE182722856}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF460F6-26B6-4B15-AFB1-3AE182722856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFF087EB-5931-4CD8-894B-9DEBBE093E7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFF087EB-5931-4CD8-894B-9DEBBE093E7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFF087EB-5931-4CD8-894B-9DEBBE093E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFF087EB-5931-4CD8-894B-9DEBBE093E7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47F379E9-1506-4B81-84DE-BE9099AD3E86}
+	EndGlobalSection
+EndGlobal
