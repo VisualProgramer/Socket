@@ -5,49 +5,276 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:iChat"
         xmlns:viewmodels="clr-namespace:iChat.ViewModels"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
+        Icon="D:\IT_Step\GitHub\Socket\iChat\iChat\Images\icons8-communication.gif">
+
     <Window.DataContext>
-        <viewmodels:MainWindowModel/>
+        <ObjectDataProvider ObjectType="viewmodels:MainWindowModel"
+                            xmlns:data="clr-namespace:iChat.ViewModels">
+            <ObjectDataProvider.ConstructorParameters>
+                <data:LoginViewModel></data:LoginViewModel>
+            </ObjectDataProvider.ConstructorParameters>
+        </ObjectDataProvider>
     </Window.DataContext>
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <StackPanel>
-                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="Connect"
-                        Command="{Binding ConnectToServerCommand}"/>
-                <ListView ItemsSource="{Binding Users}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Username}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
-        </Grid>
+    <Border CornerRadius="30"            
+            BorderThickness="3"
+            Padding="20,5">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2196f3" Offset="0.33"/>
+                <GradientStop Color="#ff5722" Offset="0.66"/>
+                <GradientStop Color="#ffb64c" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Border.Background>
+            <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                <GradientStop Color="#FF7BC7CB"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Button 
+                    HorizontalAlignment="Right"
+                    Click="btnClose_Click"
+                    Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="BorderBrush">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                                                <GradientStop Color="#2196f3" Offset="0.33"/>
+                                                <GradientStop Color="#ff5722" Offset="0.66"/>
+                                                <GradientStop Color="#ffb64c" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
 
-        <Grid Grid.Column="1">
-            <StackPanel>
-                <ListView Height="330"
-                          ItemsSource="{Binding Messages}">                    
-                </ListView>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Name ="txtMessage" 
-                             Width="300"
-                             VerticalAlignment="Center"
-                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="Send"
-                            VerticalAlignment="Center"
-                            Command="{Binding SendMessageToServerCommand}"
-                            Click="Button_Click"/>
-                </StackPanel>
-            </StackPanel>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image
+                                    gif:ImageBehavior.AnimatedSource="D:\IT_Step\GitHub\Socket\iChat\iChat\Images\icon_close_window.gif">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="gif:ImageBehavior.AnimationSpeedRatio" Value="0.0001"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="gif:ImageBehavior.AnimationSpeedRatio" Value="1"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Border CornerRadius="30"
+                                Background="White"
+                                BorderThickness="3"
+                                Padding="10,10">
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#2196f3" Offset="0.33"/>
+                                    <GradientStop Color="#ff5722" Offset="0.66"/>
+                                    <GradientStop Color="#ffb64c" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <ListView ItemsSource="{Binding Users}"
+                                      BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="3"
+                                                CornerRadius="10"
+                                                Padding="10,0"
+                                                Width="150" VerticalAlignment="Center">
+                                            <Border.BorderBrush>
+                                                <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                                                    <GradientStop Color="#ff5722"/>
+                                                    <GradientStop Color="Black" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.BorderBrush>
+                                            <Border.Background>
+                                                <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                                                    <GradientStop Color="#FF7BC7CB"/>
+                                                    <GradientStop Color="White" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding PhotoPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                   Height="30"
+                                                   Width="30"
+                                                   Margin="3">
+                                            </Image>
+                                            <TextBlock Text="{Binding Username}"
+                                                       Foreground="Black"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="15"
+                                                       Margin="10"/>
+                                            </StackPanel>
+                                        </Border>
+                                        
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </Border>
+
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <StackPanel>
+                            <Border CornerRadius="30"
+                                    Background="White"
+                                    BorderThickness="3"
+                                    Padding="20,5"
+                                    Margin="5,0,0,0">
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#2196f3" Offset="0.33"/>
+                                        <GradientStop Color="#ff5722" Offset="0.66"/>
+                                        <GradientStop Color="#ffb64c" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                                <ListView Height="250"
+                                      ItemsSource="{Binding Messages}"
+                                      BorderThickness="0"
+                                      Margin="10">
+                                    
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border CornerRadius="5"
+                                                Background="White"
+                                                BorderThickness="3"
+                                                Padding="3">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                                                        <GradientStop Color="#FF7BC7CB"/>
+                                                        <GradientStop Color="White" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding PhotoPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                   Height="30" Width="30"
+                                                   Margin="10,0,15,0"/>
+                                                        <TextBlock Text="{Binding Message}"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding Date}"
+                                                       FontSize="8"
+                                                       Foreground="DarkGray"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                            </Border>
+                            <StackPanel Orientation="Horizontal"
+                                        Height="100">
+                                <Border CornerRadius="15"
+                                    Background="White"
+                                    BorderThickness="3"
+                                    Padding="20,0"
+                                        Margin="20,0,0,0"
+                                        Height="50">
+                                    <Border.BorderBrush>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#2196f3" Offset="0.33"/>
+                                            <GradientStop Color="#ff5722" Offset="0.66"/>
+                                            <GradientStop Color="#ffb64c" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.BorderBrush>
+                                    <TextBox Name ="txtMessage" 
+                                             BorderThickness="0"
+                                         Height="30"
+                                         Margin="30,0"
+                                         Width="300"
+                                         VerticalAlignment="Center"
+                                         Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                </Border>
+                                <Button Content="Send"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding SendMessageToServerCommand}"
+                                        Margin="40,0">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="DarkGray"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="BorderBrush">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                                                                <GradientStop Color="#2196f3" Offset="0.33"/>
+                                                                <GradientStop Color="#ff5722" Offset="0.66"/>
+                                                                <GradientStop Color="#ffb64c" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Width="48" Height="48"
+                                                    CornerRadius="9"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="5">
+                                                <Image gif:ImageBehavior.AnimatedSource="D:\IT_Step\GitHub\Socket\iChat\iChat\Images\icon_send_message.gif">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Setter Property="gif:ImageBehavior.AnimationSpeedRatio" Value="0.0001"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="gif:ImageBehavior.AnimationSpeedRatio" Value="1"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>

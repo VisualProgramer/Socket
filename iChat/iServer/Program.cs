@@ -6,20 +6,22 @@ namespace iServer
 {
     class Program
     {
-        private static TcpListener _tcpListener;
+        private static Socket _serverSocket;
         private static List<ChatUser> _users;
         private static int port = 5555;
         private static IPAddress ipAddress = IPAddress.Parse("10.0.0.52");
+        private static IPEndPoint _endPoint = new IPEndPoint(ipAddress, port);
 
         static void Main(string[] args)
         {
             _users = new List<ChatUser>();
-            _tcpListener = new TcpListener(ipAddress, port);
-            _tcpListener.Start();
+            _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _serverSocket.Bind(_endPoint);
+            _serverSocket.Listen(10);
 
             while (true)
             {
-                var user = new ChatUser(_tcpListener.AcceptTcpClient());
+                var user = new ChatUser(_serverSocket.Accept());
                 _users.Add(user);
 
                 SendAllUsersToUsers();
@@ -36,8 +38,21 @@ namespace iServer
                     usersData.WriteOpcode(1);
                     usersData.WriteMessage(user.Username);
                     usersData.WriteMessage(user.UID.ToString());
-                    sentToUser.clientSocket.Client.Send(usersData.GetData());
+                    usersData.WriteMessage(user.PhotoPath);
+                    sentToUser.clientSocket.Send(usersData.GetData());
                 }
+            }
+        }
+
+        public static void SendMessageToUsers(string message, string photoPath)
+        {
+            foreach (var user in _users)
+            {
+                var messageData = new DataCreator();
+                messageData.WriteOpcode(2);
+                messageData.WriteMessage(message);
+                messageData.WriteMessage(photoPath);
+                user.clientSocket.Send(messageData.GetData());
             }
         }
 
@@ -48,9 +63,10 @@ namespace iServer
                 var messageData = new DataCreator();
                 messageData.WriteOpcode(2);
                 messageData.WriteMessage(message);
-                user.clientSocket.Client.Send(messageData.GetData());
+                user.clientSocket.Send(messageData.GetData());
             }
         }
+
 
         public static void SendAllUsersDisconnectedUser(string uid)
         {
@@ -61,7 +77,7 @@ namespace iServer
                 var disconnectData = new DataCreator();
                 disconnectData.WriteOpcode(3);
                 disconnectData.WriteMessage(uid);
-                user.clientSocket.Client.Send(disconnectData.GetData());
+                user.clientSocket.Send(disconnectData.GetData());
             }
 
             SendMessageToUsers($"{disconnectedUser.Username} disconnected");

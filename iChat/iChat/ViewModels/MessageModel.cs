@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace iChat.ViewModels
 {
-    public class UserModel
+    public class MessageModel
     {
-        public string Username { get; set; }
-        public string UID { get; set; }
+        public string Message { get; set; }
         public string PhotoPath { get; set; }
+        public DateTime Date { get; set; }
+
+
+        public MessageModel()
+        {
+            Date = DateTime.Now;
+        }
     }
 }

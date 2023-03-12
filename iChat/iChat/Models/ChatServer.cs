@@ -8,35 +8,38 @@ using System.Threading.Tasks;
 
 namespace iChat.Models
 {
-    internal class ChatServer
+    public class ChatServer
     {
         private int _port = 5555;
         private IPAddress _ipAddress = IPAddress.Parse("10.0.0.52");
 
         public DataReader dataReader;
-        public TcpClient client;
+        public Socket client;
+
         public event Action connectedEvent;
         public event Action messageEvent;
         public event Action disconnectedEvent;
 
         public ChatServer()
         {
-            client = new TcpClient();
+            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
-        public void ConnectToServer(string username)
+        public void ConnectToServer(string username, string photoPath)
         {
             if (!client.Connected)
             {
-                client.Connect(_ipAddress,_port);
-                dataReader = new DataReader(client.GetStream());
+                client.Connect(_ipAddress, _port);
+                dataReader = new DataReader(new NetworkStream(client));
 
                 var connectData = new DataCreator();
                 connectData.WriteOpcode(0);
                 connectData.WriteMessage(username);
-                client.Client.Send(connectData.GetData());
+                connectData.WriteMessage(photoPath);
+                client.Send(connectData.GetData());
 
-                ReadDataFromServer();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
             }
         }
 
@@ -45,12 +48,12 @@ namespace iChat.Models
             var messageData = new DataCreator();
             messageData.WriteOpcode(2);
             messageData.WriteMessage(message);
-            client.Client.Send(messageData.GetData());
+            client.Send(messageData.GetData());
         }
 
-        private void ReadDataFromServer()
+        public void ReadDataFromServer()
         {
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 while (true)
                 {
