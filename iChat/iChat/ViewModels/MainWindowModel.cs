@@ -22,6 +22,8 @@ namespace iChat.ViewModels
         public MainWindowModel(LoginViewModel loginViewModel)
         {
             _chatServer = LoginViewModel.chatServer;
+            Username = LoginViewModel.Username;
+            PhotoPath = LoginViewModel.PhotoPath;
             _chatServer.ReadDataFromServer();
             Users = new ObservableCollection<UserModel>();
             Messages = new ObservableCollection<MessageModel>();
@@ -37,17 +39,23 @@ namespace iChat.ViewModels
         {
             var uid = _chatServer.dataReader.ReadMessage();
             var disconnectedUser = Users.First(x => x.UID == uid);
-            Application.Current.Dispatcher.Invoke(()=> Users.Remove(disconnectedUser));
+            Application.Current.Dispatcher.Invoke(() => Users.Remove(disconnectedUser));
+
+            var message = new MessageModel()
+            {
+                Message = $"{disconnectedUser.Username} disconected",
+                PhotoPathmsg = disconnectedUser.PhotoPath
+            };
+            Application.Current.Dispatcher.Invoke(() => Messages.Add(message));
         }
 
         private void RecievedMessage()
         {
-            var message = new MessageModel()
-            {
-                Message = _chatServer.dataReader.ReadMessage(),
-                PhotoPath = _chatServer.dataReader.ReadMessage(),
-            };
-        
+            var message = new MessageModel();
+
+            message.Message = _chatServer.dataReader.ReadMessage();
+            message.PhotoPathmsg = _chatServer.dataReader.ReadMessage();
+
             Application.Current.Dispatcher.Invoke(() => Messages.Add(message));
         }
 

@@ -13,8 +13,8 @@ namespace iChat.ViewModels
     {
         public static ChatServer chatServer = new ChatServer();
 
-        public string Username { get; set; }
-        public string PhotoPath { get; set; } = @"D:\IT_Step\GitHub\Socket\iChat\iChat\Images\default_user_icon.gif";
+        public static string Username { get; set; }
+        public static string PhotoPath { get; set; } = @"D:\IT_Step\GitHub\Socket\iChat\iChat\Images\default_user_icon.gif";
         public iCommand ConnectToServerCommand { get; set; }
 
         public LoginViewModel()

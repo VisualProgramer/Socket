@@ -99,11 +99,13 @@
                     <TextBlock Text="Username"
                                Foreground="#2196f3"
                                Margin="0,30,0,0"/>
-                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="#ffb64c"
                              BorderThickness="0,0,0,1"
                              Margin="5"
-                             CaretBrush="#ff5722"/>
+                             CaretBrush="#ff5722"
+                             VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Center"/>
                     <Grid>
 
 

@@ -7,7 +7,7 @@
         xmlns:viewmodels="clr-namespace:iChat.ViewModels"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="500" Width="800"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -44,6 +44,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
@@ -91,7 +92,7 @@
                 </Button>
             </Grid>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
@@ -131,23 +132,22 @@
                                                 </LinearGradientBrush>
                                             </Border.Background>
                                             <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding PhotoPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                <Image Source="{Binding PhotoPath, 
+                                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                    Height="30"
                                                    Width="30"
                                                    Margin="3">
-                                            </Image>
-                                            <TextBlock Text="{Binding Username}"
+                                                </Image>
+                                                <TextBlock Text="{Binding Username}"
                                                        Foreground="Black"
                                                        VerticalAlignment="Center"
                                                        FontSize="15"
                                                        Margin="10"/>
                                             </StackPanel>
                                         </Border>
-                                        
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-
                         </Border>
 
                     </Grid>
@@ -169,7 +169,7 @@
                                       ItemsSource="{Binding Messages}"
                                       BorderThickness="0"
                                       Margin="10">
-                                    
+
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="5"
@@ -184,12 +184,12 @@
                                                 </Border.BorderBrush>
                                                 <StackPanel>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Image Source="{Binding PhotoPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                        <Image Source="{Binding PhotoPathmsg, UpdateSourceTrigger=PropertyChanged}"
                                                    Height="30" Width="30"
                                                    Margin="10,0,15,0"/>
-                                                        <TextBlock Text="{Binding Message}"/>
+                                                        <TextBlock Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"/>
                                                     </StackPanel>
-                                                    <TextBlock Text="{Binding Date}"
+                                                    <TextBlock Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
                                                        FontSize="8"
                                                        Foreground="DarkGray"/>
                                                 </StackPanel>
@@ -197,14 +197,13 @@
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
-
                             </Border>
+
                             <StackPanel Orientation="Horizontal"
                                         Height="100">
                                 <Border CornerRadius="15"
-                                    Background="White"
-                                    BorderThickness="3"
-                                    Padding="20,0"
+                                        Background="White"
+                                        BorderThickness="3"
                                         Margin="20,0,0,0"
                                         Height="50">
                                     <Border.BorderBrush>
@@ -215,13 +214,14 @@
                                         </LinearGradientBrush>
                                     </Border.BorderBrush>
                                     <TextBox Name ="txtMessage" 
-                                             BorderThickness="0"
-                                         Height="30"
-                                         Margin="30,0"
-                                         Width="300"
-                                         VerticalAlignment="Center"
-                                         Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
-
+                                             BorderThickness="1"
+                                             Height="30"
+                                             Margin="10,0"
+                                             Width="350"
+                                             VerticalAlignment="Center"
+                                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalContentAlignment="Center"
+                                             HorizontalContentAlignment="Center"/>
                                 </Border>
                                 <Button Content="Send"
                                         VerticalAlignment="Center"
@@ -274,6 +274,42 @@
                     </Grid>
                 </Grid>
 
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Border BorderThickness="3"
+                        CornerRadius="10"
+                        Padding="10,0"
+                        Width="150"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="5">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                            <GradientStop Color="#ff5722"/>
+                            <GradientStop Color="Black" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                            <GradientStop Color="#FF7BC7CB"/>
+                            <GradientStop Color="White" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding PhotoPath, UpdateSourceTrigger=PropertyChanged}"
+                               Height="30"
+                               Width="30"
+                               Margin="3">
+                        </Image>
+                        <TextBlock Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                   Foreground="Black"
+                                   VerticalAlignment="Center"
+                                   FontSize="15"
+                                   Margin="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
             </Grid>
         </Grid>
     </Border>

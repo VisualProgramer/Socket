@@ -34,12 +34,15 @@ namespace iServer
             {
                 foreach (var user in _users)
                 {
-                    var usersData = new DataCreator();
-                    usersData.WriteOpcode(1);
-                    usersData.WriteMessage(user.Username);
-                    usersData.WriteMessage(user.UID.ToString());
-                    usersData.WriteMessage(user.PhotoPath);
-                    sentToUser.clientSocket.Send(usersData.GetData());
+                    if (sentToUser.UID != user.UID)
+                    {
+                        var usersData = new DataCreator();
+                        usersData.WriteOpcode(1);
+                        usersData.WriteMessage(user.Username);
+                        usersData.WriteMessage(user.UID.ToString());
+                        usersData.WriteMessage(user.PhotoPath);
+                        sentToUser.clientSocket.Send(usersData.GetData());
+                    }
                 }
             }
         }
@@ -72,15 +75,14 @@ namespace iServer
         {
             var disconnectedUser = _users.First(x => x.UID.ToString() == uid);
             _users.Remove(disconnectedUser);
+
             foreach (var user in _users)
-            {
+            {                
                 var disconnectData = new DataCreator();
                 disconnectData.WriteOpcode(3);
                 disconnectData.WriteMessage(uid);
                 user.clientSocket.Send(disconnectData.GetData());
             }
-
-            SendMessageToUsers($"{disconnectedUser.Username} disconnected");
         }
     }
 }
