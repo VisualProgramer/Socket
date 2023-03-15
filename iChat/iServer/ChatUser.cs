@@ -15,6 +15,7 @@ namespace iServer
         public Socket clientSocket { get; set; }
 
         private DataReader _dataReader;
+        private byte opcode;
 
         public ChatUser(Socket client)
         {
@@ -22,7 +23,7 @@ namespace iServer
             UID = Guid.NewGuid();
 
             _dataReader = new DataReader(new NetworkStream(clientSocket));
-            var opcode = _dataReader.ReadByte();
+            opcode = _dataReader.ReadOpcode();
             if (opcode == 0)
             {
                 Username = _dataReader.ReadMessage();
@@ -41,7 +42,7 @@ namespace iServer
             {
                 try
                 {
-                    var opcode = _dataReader.ReadByte();
+                    var opcode = _dataReader.ReadOpcode();
                     switch (opcode)
                     {
                         case 2:
@@ -49,6 +50,14 @@ namespace iServer
                             Console.WriteLine($"[{DateTime.Now}] {Username}: {message}");
                             Program.SendMessageToUsers(message, PhotoPath);
                             break;
+
+                        case 4:
+                            var privateMessage = _dataReader.ReadMessage();
+                            var userUid = _dataReader.ReadMessage();
+                            Console.WriteLine($"[{DateTime.Now}] {Username}: {privateMessage} to {Program._users.First(x=>x.UID.ToString()==userUid).Username}");
+                            Program.SendPrivateMessage(privateMessage, userUid, UID.ToString());
+                            break;
+
                         default:
                             break;
                     }

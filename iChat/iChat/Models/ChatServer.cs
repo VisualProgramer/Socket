@@ -19,6 +19,7 @@ namespace iChat.Models
         public event Action connectedEvent;
         public event Action messageEvent;
         public event Action disconnectedEvent;
+        public event Action privateMessageEvent;
 
         public ChatServer()
         {
@@ -51,6 +52,15 @@ namespace iChat.Models
             client.Send(messageData.GetData());
         }
 
+        public void SendPrivateMessageToServer(string message, string userUid)
+        {
+            var messageData = new DataCreator();
+            messageData.WriteOpcode(4);
+            messageData.WriteMessage(message);
+            messageData.WriteMessage(userUid);
+            client.Send(messageData.GetData());
+        }
+
         public void ReadDataFromServer()
         {
             Task.Run(() =>
@@ -68,6 +78,9 @@ namespace iChat.Models
                             break;
                         case 3:
                             disconnectedEvent?.Invoke();
+                            break;
+                        case 4:
+                            privateMessageEvent?.Invoke();
                             break;
 
                         default:

@@ -7,10 +7,11 @@ namespace iServer
     class Program
     {
         private static Socket _serverSocket;
-        private static List<ChatUser> _users;
         private static int port = 5555;
         private static IPAddress ipAddress = IPAddress.Parse("10.0.0.52");
         private static IPEndPoint _endPoint = new IPEndPoint(ipAddress, port);
+
+        public static List<ChatUser> _users;
 
         static void Main(string[] args)
         {
@@ -59,17 +60,17 @@ namespace iServer
             }
         }
 
-        public static void SendMessageToUsers(string message)
+        public static void SendPrivateMessage(string message, string uidTo, string uidFrom)
         {
-            foreach (var user in _users)
-            {
-                var messageData = new DataCreator();
-                messageData.WriteOpcode(2);
-                messageData.WriteMessage(message);
-                user.clientSocket.Send(messageData.GetData());
-            }
+            var recipient = _users.First(x => x.UID.ToString() == uidTo);
+            var sender = _users.First(x => x.UID.ToString() == uidFrom);
+            var messageData = new DataCreator();
+            messageData.WriteOpcode(4);
+            messageData.WriteMessage(message);
+            messageData.WriteMessage(@"D:\IT_Step\GitHub\Socket\iChat\iChat\Images\private_msg_icon.png");
+            recipient.clientSocket.Send(messageData.GetData());
+            sender.clientSocket.Send(messageData.GetData());
         }
-
 
         public static void SendAllUsersDisconnectedUser(string uid)
         {
@@ -77,7 +78,7 @@ namespace iServer
             _users.Remove(disconnectedUser);
 
             foreach (var user in _users)
-            {                
+            {
                 var disconnectData = new DataCreator();
                 disconnectData.WriteOpcode(3);
                 disconnectData.WriteMessage(uid);

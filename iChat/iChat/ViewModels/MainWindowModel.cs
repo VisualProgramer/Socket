@@ -13,11 +13,14 @@ namespace iChat.ViewModels
         private ChatServer _chatServer;
 
         public iCommand SendMessageToServerCommand { get; set; }
+        public iCommand SendPrivateMessageToServerCommand { get; set; }
         public ObservableCollection<UserModel> Users { get; set; }
         public ObservableCollection<MessageModel> Messages { get; set; }
         public string Username { get; set; }
         public string PhotoPath { get; set; }
         public string Message { get; set; }
+        public string PrivateMessage { get; set; }
+        public string UserUid { get; set; }
 
         public MainWindowModel(LoginViewModel loginViewModel)
         {
@@ -31,8 +34,20 @@ namespace iChat.ViewModels
             _chatServer.connectedEvent += UserConnectedToServer;
             _chatServer.messageEvent += RecievedMessage;
             _chatServer.disconnectedEvent += UserDisconnectedFromServer;
+            _chatServer.privateMessageEvent += RecievePrivateMessage;
 
             SendMessageToServerCommand = new iCommand(execute => _chatServer.SendMessageToServer(Message), canExecute => !string.IsNullOrEmpty(Message));
+            SendPrivateMessageToServerCommand = new iCommand(execute => _chatServer.SendPrivateMessageToServer(PrivateMessage, UserUid), canExecute => !string.IsNullOrEmpty(PrivateMessage));
+        }
+
+        private void RecievePrivateMessage()
+        {
+            var message = new MessageModel();
+
+            message.Message = _chatServer.dataReader.ReadMessage();
+            message.PhotoPathmsg = _chatServer.dataReader.ReadMessage();
+
+            Application.Current.Dispatcher.Invoke(() => Messages.Add(message));
         }
 
         private void UserDisconnectedFromServer()

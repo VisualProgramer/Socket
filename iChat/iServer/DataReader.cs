@@ -14,9 +14,9 @@ namespace iServer
         {
             _ns = ns;  
         }
-        public int ReadOpcode()
+        public byte ReadOpcode()
         {
-            return _ns.ReadByte();
+            return (byte)_ns.ReadByte();
         }
 
         public string ReadMessage()

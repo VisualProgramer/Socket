@@ -34,5 +34,10 @@ namespace iChat
                 DragMove();
         }
 
+        private void ShowPrivateMsg_Click(object sender, RoutedEventArgs e)
+        {
+            popPrivateMsg.IsOpen = true;
+            popPrivateMsg.Tag = (sender as Button).Tag;
+        }
     }
 }
