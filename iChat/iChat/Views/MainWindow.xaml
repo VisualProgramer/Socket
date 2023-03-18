@@ -130,7 +130,7 @@
                                             <GradientStop Color="#ffb64c" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.BorderBrush>
-                                    <TextBox Name ="txtMessage" 
+                                    <TextBox Name ="txtPrivateMessage" 
                                              BorderThickness="1"
                                              Height="30"
                                              Margin="10,0"
@@ -143,7 +143,8 @@
                                 <Button Content="Send"
                                     VerticalAlignment="Center"     
                                     Margin="40,0"
-                                        Command="{Binding SendPrivateMessageToServerCommand}">
+                                        Command="{Binding SendPrivateMessageToServerCommand}"
+                                        Click="btnSendPrivateMessage_Click">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="Background" Value="Transparent"/>
@@ -336,7 +337,7 @@
                                             <GradientStop Color="#ffb64c" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.BorderBrush>
-                                    <TextBox 
+                                    <TextBox Name="txtMessage"
                                              BorderThickness="1"
                                              Height="30"
                                              Margin="10,0"
@@ -349,7 +350,8 @@
                                 <Button Content="Send"
                                         VerticalAlignment="Center"
                                         Command="{Binding SendMessageToServerCommand}"
-                                        Margin="40,0">
+                                        Margin="40,0"
+                                        Click="btnSendMessage_Click">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="Background" Value="Transparent"/>

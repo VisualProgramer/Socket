@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +39,23 @@ namespace iChat
         {
             popPrivateMsg.IsOpen = true;
             popPrivateMsg.Tag = (sender as Button).Tag;
+        }
+
+        private void btnSendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate ()
+            {
+                txtMessage.Text = "";
+            }), null);
+        }
+
+        private void btnSendPrivateMessage_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate ()
+            {
+                txtPrivateMessage.Text = "";
+            }), null);
+
         }
     }
 }
