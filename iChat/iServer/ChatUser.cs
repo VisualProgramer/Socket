@@ -12,17 +12,17 @@ namespace iServer
         public string Username { get; set; }
         public string PhotoPath { get; set; }
         public Guid UID { get; set; }
-        public Socket clientSocket { get; set; }
+        public TcpClient clientSocket { get; set; }
 
         private DataReader _dataReader;
         private byte opcode;
 
-        public ChatUser(Socket client)
+        public ChatUser(TcpClient client)
         {
             clientSocket = client;
             UID = Guid.NewGuid();
 
-            _dataReader = new DataReader(new NetworkStream(clientSocket));
+            _dataReader = new DataReader(clientSocket.GetStream());
             opcode = _dataReader.ReadOpcode();
             if (opcode == 0)
             {

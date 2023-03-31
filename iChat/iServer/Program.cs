@@ -6,7 +6,7 @@ namespace iServer
 {
     class Program
     {
-        private static Socket _serverSocket;
+        private static TcpListener _serverSocket;
         private static int port = 5555;
         private static IPAddress ipAddress = IPAddress.Parse("10.0.0.52");
         private static IPEndPoint _endPoint = new IPEndPoint(ipAddress, port);
@@ -16,13 +16,12 @@ namespace iServer
         static void Main(string[] args)
         {
             _users = new List<ChatUser>();
-            _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _serverSocket.Bind(_endPoint);
-            _serverSocket.Listen(10);
+            _serverSocket = new TcpListener(ipAddress, port);
+            _serverSocket.Start();
 
             while (true)
             {
-                var user = new ChatUser(_serverSocket.Accept());
+                var user = new ChatUser(_serverSocket.AcceptTcpClient());
                 _users.Add(user);
 
                 SendAllUsersToUsers();
@@ -42,7 +41,7 @@ namespace iServer
                         usersData.WriteMessage(user.Username);
                         usersData.WriteMessage(user.UID.ToString());
                         usersData.WriteMessage(user.PhotoPath);
-                        sentToUser.clientSocket.Send(usersData.GetData());
+                        sentToUser.clientSocket.GetStream().Write(usersData.GetData());
                     }
                 }
             }
@@ -56,7 +55,7 @@ namespace iServer
                 messageData.WriteOpcode(2);
                 messageData.WriteMessage(message);
                 messageData.WriteMessage(photoPath);
-                user.clientSocket.Send(messageData.GetData());
+                user.clientSocket.GetStream().Write(messageData.GetData());
             }
         }
 
@@ -68,8 +67,8 @@ namespace iServer
             messageData.WriteOpcode(4);
             messageData.WriteMessage(message);
             messageData.WriteMessage(@"D:\IT_Step\GitHub\Socket\iChat\iChat\Images\private_msg_icon.png");
-            recipient.clientSocket.Send(messageData.GetData());
-            sender.clientSocket.Send(messageData.GetData());
+            recipient.clientSocket.GetStream().Write(messageData.GetData());
+            sender.clientSocket.GetStream().Write(messageData.GetData());
         }
 
         public static void SendAllUsersDisconnectedUser(string uid)
@@ -82,7 +81,7 @@ namespace iServer
                 var disconnectData = new DataCreator();
                 disconnectData.WriteOpcode(3);
                 disconnectData.WriteMessage(uid);
-                user.clientSocket.Send(disconnectData.GetData());
+                user.clientSocket.GetStream().Write(disconnectData.GetData());
             }
         }
     }

@@ -14,7 +14,7 @@ namespace iChat.Models
         private IPAddress _ipAddress = IPAddress.Parse("10.0.0.52");
 
         public DataReader dataReader;
-        public Socket client;
+        public TcpClient client;
 
         public event Action connectedEvent;
         public event Action messageEvent;
@@ -23,21 +23,21 @@ namespace iChat.Models
 
         public ChatServer()
         {
-            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            client = new TcpClient(_ipAddress.ToString(),_port);
         }
 
         public void ConnectToServer(string username, string photoPath)
         {
-            if (!client.Connected)
+            //if (!client.Connected)
             {
-                client.Connect(_ipAddress, _port);
-                dataReader = new DataReader(new NetworkStream(client));
+                //client.Connect(_ipAddress, _port);
+                dataReader = new DataReader(client.GetStream());
 
                 var connectData = new DataCreator();
                 connectData.WriteOpcode(0);
                 connectData.WriteMessage(username);
                 connectData.WriteMessage(photoPath);
-                client.Send(connectData.GetData());
+                client.GetStream().Write(connectData.GetData());
 
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
@@ -49,7 +49,7 @@ namespace iChat.Models
             var messageData = new DataCreator();
             messageData.WriteOpcode(2);
             messageData.WriteMessage(message);
-            client.Send(messageData.GetData());
+            client.GetStream().Write(messageData.GetData());
         }
 
         public void SendPrivateMessageToServer(string message, string userUid)
@@ -58,7 +58,7 @@ namespace iChat.Models
             messageData.WriteOpcode(4);
             messageData.WriteMessage(message);
             messageData.WriteMessage(userUid);
-            client.Send(messageData.GetData());
+            client.GetStream().Write(messageData.GetData());
         }
 
         public void ReadDataFromServer()
